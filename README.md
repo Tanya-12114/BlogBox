@@ -7,7 +7,6 @@ BlogBox is a modern, responsive blog interface built with **HTML**, **CSS**, and
 Click below to view the site:
 
 👉 [https://tanya-12114.github.io/BlogBox/](https://tanya-12114.github.io/BlogBox/)
----
 
 ## Features
 
