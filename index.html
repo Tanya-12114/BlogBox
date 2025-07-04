@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="BlogBox – Read articles on writing, tech, productivity, and creativity.">
+    <title>WriteLog – Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #91b3d6;
+            --text: #111827;
+            --card-bg: #ffffff;
+            --footer-bg: #f1f5f9;
+            --primary: #6a11cb;
+        }
+
+        .text-muted {
+            color: #8b949e !important;
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #79c0ff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 2rem 1rem;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .tag-featured {
+            background-color: #ffc107;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #212529;
+            width: max-content;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .read-btn {
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.85rem;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            width: max-content;
+        }
+
+        .read-btn:hover {
+            background-color: #4b0ca1;
+        }
+
+        footer {
+            padding: 2rem;
+            background-color: rgb(239, 240, 243);
+            color: var(--text);
+            text-align: center;
+            font-weight: 500;
+            margin-top: 3rem;
+        }
+
+        .filter-tools {
+            margin-bottom: 2rem;
+        }
+
+        .filter-tools input,
+        .filter-tools select {
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #ccc;
+        }
+
+        .filter-tools input::placeholder {
+            color: #888;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .social-icons a i {
+            font-size: 20px;
+            color: rgb(12, 12, 12);
+            transition: color 0.3s ease;
+
+        }
+
+        .social-icons a i:hover {
+            color: #343336;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="hero">
+        <h1 class="display-4 fw-bold">BlogBox</h1>
+        <p class="lead">Ideas worth reading — on tech, life, creativity, and everything in between.</p>
+    </header>
+
+    <main role="main" class="container">
+        <div class="row filter-tools">
+            <div class="col-md-6 mb-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search posts...">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Blog posts -->
+            <div class="col-md-8">
+                <!-- Featured -->
+                <article class="card p-3 mb-4 post" data-category="writing">
+                    <span class="tag-featured">Featured</span>
+                    <h5>Why Writing Daily Transforms Your Thinking</h5>
+                    <p class="text-muted small">By Jane Doe · July 4, 2025</p>
+                    <p>Writing daily helps sharpen reasoning and develop clarity.</p>
+                    <button class="read-btn">Read More</button>
+                </article>
+
+                <!-- Posts Grid -->
+                <div class="row row-cols-1 row-cols-md-2 g-4" id="postList">
+                    <article class="col post" data-category="technology">
+                        <div class="card p-3 h-100">
+                            <h6>The Rise of Independent Tech Writers</h6>
+                            <p class="text-muted small">By Mark Liu · July 1, 2025</p>
+                            <p>Tech writers are building audiences and monetizing fast.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                    <article class="col post" data-category="design">
+                        <div class="card p-3 h-100">
+                            <h6>Design Thinking for Developers</h6>
+                            <p class="text-muted small">By Anika Patel · June 28, 2025</p>
+                            <p>Use design thinking to build user-centric software.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                    <article class="col post" data-category="productivity">
+                        <div class="card p-3 h-100">
+                            <h6>Burnout in Tech: A Guide</h6>
+                            <p class="text-muted small">By Sophia Kim · June 15, 2025</p>
+                            <p>Prevent and bounce back from developer burnout.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                    <article class="col post" data-category="creativity">
+                        <div class="card p-3 h-100">
+                            <h6>How to Stay Creative as a Developer</h6>
+                            <p class="text-muted small">By Alex Yu · June 10, 2025</p>
+                            <p>Tips to stay sharp and avoid burnout in coding.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                    <article class="col post" data-category="writing">
+                        <div class="card p-3 h-100">
+                            <h6>Lessons from 100 Days of Writing</h6>
+                            <p class="text-muted small">By Ravi Mehra · June 5, 2025</p>
+                            <p>Discipline and joy: what I learned from daily posts.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                    <article class="col post" data-category="writing">
+                        <div class="card p-3 h-100">
+                            <h6>Books That Shaped My Thinking</h6>
+                            <p class="text-muted small">By Natalie Fox · May 28, 2025</p>
+                            <p>10 books that shaped me as a writer and coder.</p>
+                            <button class="read-btn">Read More</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <aside>
+                    <div class="card p-3 mb-4">
+                        <h6>Categories</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-pencil-square me-1"></i>Writing</li>
+                            <li><i class="bi bi-cpu me-1"></i>Technology</li>
+                            <li><i class="bi bi-bar-chart-line me-1"></i>Productivity</li>
+                            <li><i class="bi bi-palette me-1"></i>Design</li>
+                            <li><i class="bi bi-lightbulb me-1"></i>Creativity</li>
+                        </ul>
+                    </div>
+
+                    <div class="card p-3">
+                        <h6>Recent Posts</h6>
+                        <ul class="list-unstyled small">
+                            <li><a href="#">Why Writing Daily Works</a></li>
+                            <li><a href="#">How to Avoid Burnout</a></li>
+                            <li><a href="#">Top 5 Dev Books</a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 BlogBox. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/your-page" target="_blank" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://www.twitter.com/your-profile" target="_blank" aria-label="Twitter">
+                    <i class="bi bi-twitter"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/your-profile" target="_blank" aria-label="LinkedIn">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="https://www.instagram.com/your-profile" target="_blank" aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const posts = document.querySelectorAll('.post');
+
+        function filterPosts() {
+            const query = searchInput.value.toLowerCase();
+
+            posts.forEach(post => {
+                const textMatch = post.innerText.toLowerCase().includes(query);
+                post.style.display = textMatch ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterPosts);
+    </script>
+</body>
+
+</html>
