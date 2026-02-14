@@ -2,11 +2,11 @@
 
 BlogBox is a modern, responsive blog interface built with **HTML**, **CSS**, and **Bootstrap 5**. It features a sleek layout for writing, tech, design, and productivity-focused content, with intuitive UI elements like search filtering, category tags, and social icons.
 
-## Live Preview
+## Live Website
 
-> Open `index.html` in your browser or use a live server (e.g., VS Code Live Server) to view the project.
+Click below to view the site:
 
----
+👉 [https://tanya-12114.github.io/BlogBox/](https://tanya-12114.github.io/BlogBox/)
 
 ## Features
 
