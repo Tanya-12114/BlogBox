@@ -1,6 +1,6 @@
 # BlogBox – A Minimal & Responsive Blog Template
 
-BlogBox is a modern, responsive blog interface built with **HTML**, **CSS**, and **Bootstrap 5**. It features a sleek layout for writing, tech, design, and productivity-focused content, with intuitive UI elements like search filtering, category tags, and social icons.
+BlogBox is a modern, responsive blog interface built with **HTML**, **CSS**, and **Javascript**. It features a sleek layout for writing, tech, design, and productivity-focused content, with intuitive UI elements like search filtering, category tags, and social icons.
 
 ## Live Website
 
