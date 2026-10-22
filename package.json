@@ -1,0 +1,15 @@
+{
+  "name": "blogbox",
+  "version": "2.0.0",
+  "description": "BlogBox – a blog that always shows the latest articles",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.21.2",
+    "sanitize-html": "^2.14.0"
+  }
+}

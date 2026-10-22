@@ -43,104 +43,21 @@
             <div class="blog-grid">
                 <!-- Main Content -->
                 <div class="main-content">
-                    <!-- Featured Article -->
-                    <article class="featured-article post" data-category="writing">
-                        <span class="featured-badge">Featured</span>
-                        <h2 class="article-title">Why Writing Daily Transforms Your Thinking</h2>
-                        <div class="article-meta">
-                            <span class="author">By Jane Doe</span>
-                            <span>•</span>
-                            <span>July 4, 2025</span>
-                            <span>•</span>
-                            <span>5 min read</span>
-                        </div>
-                        <p class="article-excerpt">
-                            Writing daily helps sharpen reasoning and develop clarity. Discover how a simple daily practice can transform the way you think, communicate, and solve problems in your personal and professional life.
-                        </p>
-                        <button class="read-more-btn">
-                            Read Full Article <i class="bi bi-arrow-right"></i>
+                    <!-- Live feed status -->
+                    <div class="feed-status" id="feedStatus" role="status" aria-live="polite">
+                        <span class="feed-status-text" id="feedStatusText">Loading the latest articles…</span>
+                        <button class="feed-refresh-btn" id="refreshBtn" type="button">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
                         </button>
-                    </article>
+                    </div>
 
-                    <!-- Articles Grid -->
+                    <!-- Featured Article (newest, filled in by script.js) -->
+                    <div id="featuredSlot"></div>
+
+                    <p class="no-results" id="noResults" hidden>No articles match your search.</p>
+
+                    <!-- Articles Grid (filled in by script.js) -->
                     <div class="articles-grid" id="postList">
-                        <article class="article-card post" data-category="technology">
-                            <h3>The Rise of Independent Tech Writers</h3>
-                            <div class="article-meta">
-                                <span class="author">By Mark Liu</span>
-                                <span>•</span>
-                                <span>July 1, 2025</span>
-                            </div>
-                            <p>Tech writers are building audiences and monetizing fast. Learn how independent creators are reshaping the tech media landscape.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
-
-                        <article class="article-card post" data-category="design">
-                            <h3>Design Thinking for Developers</h3>
-                            <div class="article-meta">
-                                <span class="author">By Anika Patel</span>
-                                <span>•</span>
-                                <span>June 28, 2025</span>
-                            </div>
-                            <p>Use design thinking to build user-centric software that truly resonates with your audience and solves real problems.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
-
-                        <article class="article-card post" data-category="productivity">
-                            <h3>Burnout in Tech: A Survival Guide</h3>
-                            <div class="article-meta">
-                                <span class="author">By Sophia Kim</span>
-                                <span>•</span>
-                                <span>June 15, 2025</span>
-                            </div>
-                            <p>Prevent and bounce back from developer burnout with these evidence-based strategies and personal insights.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
-
-                        <article class="article-card post" data-category="creativity">
-                            <h3>How to Stay Creative as a Developer</h3>
-                            <div class="article-meta">
-                                <span class="author">By Alex Yu</span>
-                                <span>•</span>
-                                <span>June 10, 2025</span>
-                            </div>
-                            <p>Tips to stay sharp and avoid burnout in coding while maintaining your creative edge and passion for development.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
-
-                        <article class="article-card post" data-category="writing">
-                            <h3>Lessons from 100 Days of Writing</h3>
-                            <div class="article-meta">
-                                <span class="author">By Ravi Mehra</span>
-                                <span>•</span>
-                                <span>June 5, 2025</span>
-                            </div>
-                            <p>Discipline and joy: what I learned from daily posts. A personal journey through the challenges and rewards of consistent writing.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
-
-                        <article class="article-card post" data-category="writing">
-                            <h3>Books That Shaped My Thinking</h3>
-                            <div class="article-meta">
-                                <span class="author">By Natalie Fox</span>
-                                <span>•</span>
-                                <span>May 28, 2025</span>
-                            </div>
-                            <p>10 books that shaped me as a writer and coder. Essential reading recommendations for creative technologists.</p>
-                            <button class="read-more-btn">
-                                Read More <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </article>
                     </div>
                 </div>
 
@@ -161,12 +78,12 @@
                     <!-- Recent Posts -->
                     <div class="sidebar-card">
                         <h3>Recent Posts</h3>
-                        <ul class="recent-posts">
-                            <li><a href="#">Why Writing Daily Works</a></li>
-                            <li><a href="#">How to Avoid Burnout</a></li>
-                            <li><a href="#">Top 5 Dev Books</a></li>
-                            <li><a href="#">Design Systems 101</a></li>
-                            <li><a href="#">Building Side Projects</a></li>
+                        <ul class="recent-posts" id="recentPosts">
+                            <li><a href="#article/writing-daily" data-open="writing-daily">Why Writing Daily Works</a></li>
+                            <li><a href="#article/burnout-guide" data-open="burnout-guide">How to Avoid Burnout</a></li>
+                            <li><a href="#article/books-thinking" data-open="books-thinking">Top 5 Dev Books</a></li>
+                            <li><a href="#article/design-systems-101" data-open="design-systems-101">Design Systems 101</a></li>
+                            <li><a href="#article/side-projects" data-open="side-projects">Building Side Projects</a></li>
                         </ul>
                     </div>
 
@@ -183,6 +100,20 @@
             </div>
         </div>
     </main>
+
+
+    <!-- Article Reader -->
+    <div class="reader-overlay" id="readerOverlay" aria-hidden="true">
+        <div class="reader" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+            <button class="reader-close" id="readerClose" aria-label="Close article"><i class="bi bi-x-lg"></i></button>
+            <div class="reader-body">
+                <span class="reader-category" id="readerCategory"></span>
+                <h2 class="reader-title" id="readerTitle"></h2>
+                <div class="article-meta" id="readerMeta"></div>
+                <div class="reader-content" id="readerContent"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Theme Toggle Button -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="BlogBox – Read articles on writing, tech, productivity, and creativity.">
+    <title>BlogBox – Ideas Worth Reading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>BlogBox</h1>
+        <p>Ideas worth reading — on tech, life, creativity, and everything in between.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <div class="search-wrapper">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search articles, topics, authors...">
+                </div>
+                <div class="category-pills">
+                    <button class="category-pill active" data-category="all">All</button>
+                    <button class="category-pill" data-category="writing">Writing</button>
+                    <button class="category-pill" data-category="technology">Technology</button>
+                    <button class="category-pill" data-category="productivity">Productivity</button>
+                    <button class="category-pill" data-category="design">Design</button>
+                    <button class="category-pill" data-category="creativity">Creativity</button>
+                </div>
+            </section>
+
+            <!-- Blog Grid -->
+            <div class="blog-grid">
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Live feed status -->
+                    <div class="feed-status" id="feedStatus" role="status" aria-live="polite">
+                        <span class="feed-status-text" id="feedStatusText">Loading the latest articles…</span>
+                        <button class="feed-refresh-btn" id="refreshBtn" type="button">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+                    </div>
+
+                    <!-- Featured Article (newest, filled in by script.js) -->
+                    <div id="featuredSlot"></div>
+
+                    <p class="no-results" id="noResults" hidden>No articles match your search.</p>
+
+                    <!-- Articles Grid (filled in by script.js) -->
+                    <div class="articles-grid" id="postList">
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Categories -->
+                    <div class="sidebar-card">
+                        <h3>Categories</h3>
+                        <ul class="category-list">
+                            <li><i class="bi bi-pencil-square"></i>Writing</li>
+                            <li><i class="bi bi-cpu"></i>Technology</li>
+                            <li><i class="bi bi-bar-chart-line"></i>Productivity</li>
+                            <li><i class="bi bi-palette"></i>Design</li>
+                            <li><i class="bi bi-lightbulb"></i>Creativity</li>
+                        </ul>
+                    </div>
+
+                    <!-- Recent Posts -->
+                    <div class="sidebar-card">
+                        <h3>Recent Posts</h3>
+                        <ul class="recent-posts" id="recentPosts">
+                            <li><a href="#article/writing-daily" data-open="writing-daily">Why Writing Daily Works</a></li>
+                            <li><a href="#article/burnout-guide" data-open="burnout-guide">How to Avoid Burnout</a></li>
+                            <li><a href="#article/books-thinking" data-open="books-thinking">Top 5 Dev Books</a></li>
+                            <li><a href="#article/design-systems-101" data-open="design-systems-101">Design Systems 101</a></li>
+                            <li><a href="#article/side-projects" data-open="side-projects">Building Side Projects</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div class="sidebar-card newsletter-card">
+                        <h3>Stay Updated</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Get the latest articles delivered to your inbox weekly.</p>
+                        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+                            <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                            <button type="submit" class="newsletter-btn">Subscribe</button>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Article Reader -->
+    <div class="reader-overlay" id="readerOverlay" aria-hidden="true">
+        <div class="reader" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+            <button class="reader-close" id="readerClose" aria-label="Close article"><i class="bi bi-x-lg"></i></button>
+            <div class="reader-body">
+                <span class="reader-category" id="readerCategory"></span>
+                <h2 class="reader-title" id="readerTitle"></h2>
+                <div class="article-meta" id="readerMeta"></div>
+                <div class="reader-content" id="readerContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="bi bi-sun-fill sun-icon"></i>
+        <i class="bi bi-moon-stars-fill moon-icon"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="Facebook">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="Twitter">
+                    <i class="bi bi-twitter"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="LinkedIn">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="#" class="social-icon" aria-label="GitHub">
+                    <i class="bi bi-github"></i>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2025 BlogBox. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

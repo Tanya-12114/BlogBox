@@ -1,31 +1,56 @@
-# BlogBox – A Minimal & Responsive Blog Template
+# BlogBox – A Blog That Always Shows the Latest Articles
 
-BlogBox is a modern, responsive blog interface built with **HTML**, **CSS**, and **Javascript**. It features a sleek layout for writing, tech, design, and productivity-focused content, with intuitive UI elements like search filtering, category tags, and social icons.
+A responsive blog with search, category filters, dark/light theme and an in-page article reader.
+A small Node.js server pulls the newest articles from [DEV Community](https://dev.to) (free, no API key),
+cleans them, caches them, and serves them to the page.
 
-## Live Website
+## Run it
 
-Click below to view the site:
+You need [Node.js 18+](https://nodejs.org).
 
-👉 [https://tanya-12114.github.io/BlogBox/](https://tanya-12114.github.io/BlogBox/)
+```bash
+npm install
+npm start
+```
 
-## Features
+Then open **http://localhost:3000**
 
-- Clean Hero section with gradient background
-- Search functionality to filter blog posts
-- Categorized blog entries (Tech, Writing, Design, etc.)
-- Featured post badge
-- Responsive card grid layout using Bootstrap
-- Fully mobile-friendly design
-- Sidebar with recent posts and categories
-- Social media icons in footer
+## How it works
 
----
+```
+Browser  -->  server.js (Express)  -->  DEV Community API
+              - caches lists for 10 min
+              - caches full articles for 1 hour
+              - strips unsafe HTML
+              - serves last good data if the source is down
+```
 
-## Technologies Used
+- The page refreshes itself every 10 minutes, whenever you return to the tab, and via the **Refresh** button.
+- Clicking a category loads that category's own newest articles.
+- If the server can't be reached, the page shows the last saved articles (or a few built-in samples).
 
-- HTML5
-- CSS3
-- [Bootstrap 5.3](https://getbootstrap.com/)
-- Bootstrap Icons
+## Project layout
 
----
+| File | Purpose |
+| --- | --- |
+| `server.js` | Web server + article API + cache |
+| `public/index.html` | Page structure |
+| `public/styles.css` | Styling (dark/light themes) |
+| `public/script.js` | Feed loading, search, filters, article reader |
+
+## API
+
+- `GET /api/articles?category=all|writing|technology|productivity|design|creativity&limit=30`
+- `GET /api/articles/:id` - full article text
+- `GET /api/health` - quick status check (what is cached and how old it is)
+
+## Customising
+
+- **Topics:** edit the `CATEGORIES` list at the top of `server.js` (each category is a set of DEV tags).
+- **Refresh speed:** change `LIST_TTL` in `server.js` and `REFRESH_MS` in `public/script.js`.
+- **Port:** `PORT=8080 npm start`
+
+## Deploying
+
+Because it now has a server, GitHub Pages alone can't host it. Free options that work with
+`npm install` + `npm start`: Render, Railway, Fly.io, or any VPS.
