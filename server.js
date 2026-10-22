@@ -208,16 +208,43 @@ app.get('/api/articles/:id', async (req, res) => {
     }
 });
 
-app.get('/api/health', (req, res) => {
+// /api/health            -> quick status
+// /api/health?check=1    -> also tries to reach the article source and reports what happened
+app.get('/api/health', async (req, res) => {
     res.set('Cache-Control', 'no-store');
+    let probe;
+    if (req.query.check) {
+        try {
+            const r = await fetch(`${UPSTREAM}/articles?per_page=1`, {
+                headers: { 'User-Agent': 'BlogBox/2.0', 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(TIMEOUT)
+            });
+            probe = { status: r.status, ok: r.ok };
+        } catch (err) {
+            probe = { error: err.message };
+        }
+    }
     res.json({
         ok: true,
+        node: process.version,
         upstream: UPSTREAM,
+        probe,
         cachedLists: [...listCache].map(([k, v]) => ({ category: k, articles: v.articles.length, ageSeconds: Math.round((Date.now() - v.at) / 1000) }))
     });
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Last line of defence: any unexpected crash becomes a JSON error that is logged,
+// instead of an opaque platform 500 page.
+app.use((err, req, res, next) => {
+    console.error('[crash]', req.method, req.url, err && err.stack || err);
+    if (res.headersSent) return next(err);
+    res.set('Cache-Control', 'no-store');
+    res.status(500).json({ error: 'Internal error', detail: String(err && err.message || err) });
+});
+
+process.on('unhandledRejection', e => console.error('[unhandledRejection]', e));
 
 if (require.main === module) {
     app.listen(PORT, () => console.log(`BlogBox running at http://localhost:${PORT}`));
