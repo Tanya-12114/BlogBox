@@ -1,15 +1,25 @@
 {
   "name": "blogbox",
   "version": "2.0.0",
-  "description": "BlogBox – a blog that always shows the latest articles",
+  "description": "BlogBox \u2013 a blog that always shows the latest articles",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "express": "^4.21.2",
-    "sanitize-html": "^2.14.0"
+    "sanitize-html": "2.13.1"
+  },
+  "overrides": {
+    "htmlparser2": "^8.0.0",
+    "domutils": "^3.1.0",
+    "dom-serializer": "^2.0.0",
+    "domhandler": "^5.0.3",
+    "domelementtype": "^2.3.0",
+    "entities": "^4.5.0"
   }
 }
