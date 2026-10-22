@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 const UPSTREAM = process.env.UPSTREAM || 'https://dev.to/api';  // overridable (used by tests)
 const LIST_TTL = 10 * 60 * 1000;      // article lists are re-fetched after 10 minutes
 const BODY_TTL = 60 * 60 * 1000;      // full article text is cached for 1 hour
-const TIMEOUT = 8000;
+const TIMEOUT = 5000;
 const RECENT_DAYS = 7;          // prefer articles from the last week
 const MIN_RECENT = 12;          // if fewer than this, add popular older ones
 const MAX_PER_CATEGORY = 40;
@@ -182,10 +182,15 @@ app.get('/api/articles', async (req, res) => {
 
     try {
         const { articles, updatedAt, stale } = await getList(category);
-        res.set('Cache-Control', 'no-cache');
+        // Let the CDN (e.g. Vercel's edge) keep this for 10 min (1 min if the data is stale),
+        // while browsers always re-check. Keeps the number of calls to the source small.
+        res.set('Cache-Control', stale
+            ? 'public, max-age=0, s-maxage=60'
+            : 'public, max-age=0, s-maxage=600, stale-while-revalidate=3600');
         res.json({ category, stale, updatedAt: new Date(updatedAt).toISOString(), articles: articles.slice(0, limit) });
     } catch (err) {
         console.error('[error] list', category, err.message);
+        res.set('Cache-Control', 'no-store');
         res.status(502).json({ error: 'Could not reach the article source right now.' });
     }
 });
@@ -193,15 +198,18 @@ app.get('/api/articles', async (req, res) => {
 app.get('/api/articles/:id', async (req, res) => {
     if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ error: 'Bad id' });
     try {
-        res.set('Cache-Control', 'no-cache');
-        res.json(await getArticle(req.params.id));
+        const article = await getArticle(req.params.id);
+        res.set('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
+        res.json(article);
     } catch (err) {
         console.error('[error] article', req.params.id, err.message);
+        res.set('Cache-Control', 'no-store');
         res.status(502).json({ error: 'Could not load this article right now.' });
     }
 });
 
 app.get('/api/health', (req, res) => {
+    res.set('Cache-Control', 'no-store');
     res.json({
         ok: true,
         upstream: UPSTREAM,

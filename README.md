@@ -53,5 +53,10 @@ Browser  -->  server.js (Express)  -->  DEV Community API
 
 ## Deploying
 
-Because it now has a server, GitHub Pages alone can't host it. Free options that work with
-`npm install` + `npm start`: Render, Railway, Fly.io, or any VPS.
+Because it now has a server, GitHub Pages alone can't host it.
+
+**Vercel (works on its own, no other host needed):** import the repo, leave Build Command and
+Output Directory empty, deploy. `api/index.js` + `vercel.json` route every `/api/...` request to
+`server.js`, and `public/` is served as the website. Check it with `https://YOUR-SITE.vercel.app/api/health`.
+
+Other options that run `npm install` + `npm start`: Render, Railway, Fly.io, or any VPS.

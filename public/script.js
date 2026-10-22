@@ -159,6 +159,7 @@ let feed = [];
 let updatedAt = null;
 let refreshing = false;
 let lastFailed = false;
+let lastError = '';
 
 const featuredSlot = document.getElementById('featuredSlot');
 const postList = document.getElementById('postList');
@@ -188,7 +189,10 @@ const FALLBACK = Object.entries(BUNDLED_ARTICLES).map(([id, a]) => {
 // Fetch the newest articles for ONE category
 async function fetchCategory(key, limit) {
     const res = await fetch(`${API}/articles?category=${encodeURIComponent(key)}&limit=${limit}`);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error('server answered HTTP ' + res.status);
+    if (!(res.headers.get('content-type') || '').includes('json')) {
+        throw new Error('the /api route returned a web page, so the server is not running');
+    }
     const data = await res.json();
     return data.articles.map(a => ({ ...a, html: null }));
 }
@@ -343,7 +347,8 @@ function renderStatus() {
         statusText.textContent = 'Fetching the latest articles…';
     } else if (lastFailed) {
         statusText.textContent = "Couldn't reach the live feed – showing " +
-            (updatedAt ? 'articles saved from ' + updatedAt.toLocaleString() : 'sample articles') + '.';
+            (updatedAt ? 'articles saved from ' + updatedAt.toLocaleString() : 'sample articles') + '.' +
+            (lastError ? ' (' + lastError + ')' : '');
     } else if (updatedAt) {
         statusText.textContent = 'Updated ' + updatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
             ' · refreshes automatically every 10 minutes';
@@ -359,11 +364,13 @@ async function refreshFeed() {
         loadedCategories.clear();
         updatedAt = new Date();
         lastFailed = false;
+        lastError = '';
         saveCache();
         render();
         loadCategory(activeCategory, true);   // top up the category being viewed
     } catch (err) {
         lastFailed = true;
+        lastError = err && err.message ? err.message : 'unknown error';
         if (!feed.length) {
             feed = FALLBACK;
             render();
