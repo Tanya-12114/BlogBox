@@ -142,7 +142,7 @@ const BUNDLED_ARTICLES = {
 // server lives on a different address than the page.
 const API = (window.BLOGBOX_API || '') + '/api';
 const REFRESH_MS = 10 * 60 * 1000;      // auto-refresh every 10 minutes
-const CACHE_KEY = 'blogbox_feed_v2';
+const CACHE_KEY = 'blogbox_feed_v3';
 const MAX_ARTICLES = 25;                // shown at once: 1 featured + 24 cards
 
 // Each BlogBox category is fed by one or more DEV tags

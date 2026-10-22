@@ -46,7 +46,8 @@ Browser  -->  server.js (Express)  -->  DEV Community API
 
 ## Customising
 
-- **Topics:** edit the `CATEGORIES` list at the top of `server.js` (each category is a set of DEV tags).
+- **Topics:** edit the `CATEGORIES` list at the top of `server.js` (each category is a set of DEV tags). The server asks for each tag separately and only keeps articles that really carry one of the category's tags.
+- **Freshness:** `RECENT_DAYS` in `server.js` (default 7) prefers articles from the last week; quiet topics are topped up with older popular ones.
 - **Refresh speed:** change `LIST_TTL` in `server.js` and `REFRESH_MS` in `public/script.js`.
 - **Port:** `PORT=8080 npm start`
 

@@ -15,6 +15,9 @@ const UPSTREAM = process.env.UPSTREAM || 'https://dev.to/api';  // overridable (
 const LIST_TTL = 10 * 60 * 1000;      // article lists are re-fetched after 10 minutes
 const BODY_TTL = 60 * 60 * 1000;      // full article text is cached for 1 hour
 const TIMEOUT = 8000;
+const RECENT_DAYS = 7;          // prefer articles from the last week
+const MIN_RECENT = 12;          // if fewer than this, add popular older ones
+const MAX_PER_CATEGORY = 40;
 
 // Each BlogBox category is fed by a few related DEV tags
 const CATEGORIES = {
@@ -79,15 +82,40 @@ function merge(lists) {
 const listCache = new Map();   // key -> { at, articles }
 const inflight = new Map();    // key -> Promise, so simultaneous visitors share one request
 
+// Which tags does an article carry? (the list response has tag_list and/or a "a, b, c" string)
+function tagsOf(a) {
+    if (Array.isArray(a.tag_list)) return a.tag_list.map(t => String(t).toLowerCase());
+    return String(a.tags || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+}
+
+// One request per tag. (The single `tag` filter is the dependable one; the multi-tag
+// `tags` filter proved unreliable and made every category show the same articles.)
+function fetchTag(tag, perPage, topDays) {
+    const p = new URLSearchParams({ tag, per_page: String(perPage) });
+    if (topDays) p.set('top', String(topDays));     // only articles from the last N days
+    return getJson(`${UPSTREAM}/articles?${p}`);
+}
+
 async function fetchCategory(key, perPage) {
     const cat = CATEGORIES[key];
-    const q = n => `${UPSTREAM}/articles?per_page=${perPage}&${n}`;
-    let list = await getJson(q('tags=' + encodeURIComponent(cat.tags.join(','))));
-    // Safety net: if the combined query is empty, try each tag on its own
-    for (let i = 0; !list.length && i < cat.tags.length; i++) {
-        list = await getJson(q('tag=' + encodeURIComponent(cat.tags[i])));
+
+    async function run(topDays) {
+        const results = await Promise.allSettled(cat.tags.map(t => fetchTag(t, perPage, topDays)));
+        const ok = results.filter(r => r.status === 'fulfilled');
+        if (!ok.length) throw new Error(`All tag requests failed for ${key}`);
+        return ok.flatMap(r => r.value);
     }
-    return list.map(a => normalize(a, key));
+
+    // Prefer recent articles; if a topic is quiet, top up with its popular ones
+    let raw = await run(RECENT_DAYS);
+    if (raw.length < MIN_RECENT) raw = raw.concat(await run(0));
+
+    // Safety check: keep only articles that really carry one of this category's tags,
+    // so a source that ignores the filter can never leak unrelated articles in.
+    if (raw.some(a => tagsOf(a).length)) {
+        raw = raw.filter(a => tagsOf(a).some(t => cat.tags.includes(t)));
+    }
+    return merge([raw.map(a => normalize(a, key))]).slice(0, MAX_PER_CATEGORY);
 }
 
 // "all" = the five category lists merged (each is cached on its own)
@@ -107,7 +135,9 @@ async function getList(category) {
     if (!inflight.has(key)) {
         inflight.set(key, (async () => {
             try {
-                const articles = category === 'all' ? await loadAll() : await fetchCategory(category, 30);
+                const articles = category === 'all' ? await loadAll() : await fetchCategory(category, 20);
+                // An empty answer when we already had articles means the source is misbehaving
+                if (!articles.length && hit && hit.articles.length) throw new Error('Source returned no articles');
                 listCache.set(key, { at: Date.now(), articles });
                 return { articles, updatedAt: Date.now(), stale: false };
             } catch (err) {
